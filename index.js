@@ -139,7 +139,7 @@ app.get("/video", async function (req, res) {
     const selector = "html";
     const fps = 15;
     const duration = 1;
-    const output = "./video.mp4"; // Save the video to a temporary directory
+    const output = "./temp/video.mp4"; // Save the video to a temporary directory
 
     const browser = await puppeteer.launch({
       headless: true,
