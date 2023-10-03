@@ -133,71 +133,94 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.get("/video", async function (req, res) {
-  try {
-    const url = "https://bright-lokum-ef4278.netlify.app/";
-    const selector = "html";
-    const fps = 15;
-    const duration = 1;
-    const output = "./temp/video.mp4"; // Save the video to a temporary directory
+// app.get("/video", async function (req, res) {
+//   try {
+//     const url = "https://bright-lokum-ef4278.netlify.app/";
+//     const selector = "html";
+//     const fps = 15;
+//     const duration = 1;
+//     const output = "./temp/video.mp4"; // Save the video to a temporary directory
 
-    const browser = await puppeteer.launch({
+//     const browser = await puppeteer.launch({
+//       headless: true,
+//       args: ["--no-sandbox", "--disable-setuid-sandbox"],
+//     });
+//     const page = await browser.newPage();
+//     await page.goto(url);
+
+//     const frameCount = fps * duration;
+//     const frames = [];
+
+//     for (let i = 0; i < frameCount; i++) {
+//       const elementHandle = await page.$(selector);
+//       const screenshot = await elementHandle.screenshot();
+//       frames.push(screenshot);
+//       await new Promise((resolve) => setTimeout(resolve, 1000 / fps));
+//     }
+
+//     await browser.close();
+
+//     const frameDir = "./frames"; // Temporary frames directory
+
+//     if (!fs.existsSync(frameDir)) {
+//       fs.mkdirSync(frameDir, { recursive: true });
+//     }
+
+//     frames.forEach((frame, index) => {
+//       console.log("index", index);
+//       fs.writeFileSync(`${frameDir}/frame_${index}.png`, frame);
+//     });
+
+//     const { stdout, stderr } = await exec(
+//       `ffmpeg -r ${fps} -i ${frameDir}/frame_%d.png -vcodec libx264 -pix_fmt yuv420p ${output}`
+//     );
+
+//     console.log(stdout);
+//     console.error(stderr);
+
+//     // Clean up the temporary frames directory
+//     fs.rmdirSync(frameDir, { recursive: true });
+
+//     // Send the video as a download
+//     res.download(output, "video.mp4", (err) => {
+//       if (err) {
+//         console.error("Error sending video file:", err);
+//         res.status(500).json({
+//           error: "An error occurred while sending the video file",
+//         });
+//       } else {
+//         // Delete the video file after it's sent
+//         fs.unlinkSync(output);
+//       }
+//     });
+//   } catch (error) {
+//     console.error("Error", error);
+//     res.status(500).json({ error: "An error occurred" });
+//   }
+// });
+
+app.get("/api", async (req, res) => {
+  let options = {};
+
+  if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+    options = {
+      args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
+      defaultViewport: chrome.defaultViewport,
+      executablePath: await chrome.executablePath,
       headless: true,
-      executablePath:
-        "./node_modules/puppeteer/.local-chromium/win64-722234/chrome-win/chrome.exe",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
-    const page = await browser.newPage();
-    await page.goto(url);
+      ignoreHTTPSErrors: true,
+    };
+  }
 
-    const frameCount = fps * duration;
-    const frames = [];
+  try {
+    let browser = await puppeteer.launch(options);
 
-    for (let i = 0; i < frameCount; i++) {
-      const elementHandle = await page.$(selector);
-      const screenshot = await elementHandle.screenshot();
-      frames.push(screenshot);
-      await new Promise((resolve) => setTimeout(resolve, 1000 / fps));
-    }
-
-    await browser.close();
-
-    const frameDir = "./frames"; // Temporary frames directory
-
-    if (!fs.existsSync(frameDir)) {
-      fs.mkdirSync(frameDir, { recursive: true });
-    }
-
-    frames.forEach((frame, index) => {
-      console.log("index", index);
-      fs.writeFileSync(`${frameDir}/frame_${index}.png`, frame);
-    });
-
-    const { stdout, stderr } = await exec(
-      `ffmpeg -r ${fps} -i ${frameDir}/frame_%d.png -vcodec libx264 -pix_fmt yuv420p ${output}`
-    );
-
-    console.log(stdout);
-    console.error(stderr);
-
-    // Clean up the temporary frames directory
-    fs.rmdirSync(frameDir, { recursive: true });
-
-    // Send the video as a download
-    res.download(output, "video.mp4", (err) => {
-      if (err) {
-        console.error("Error sending video file:", err);
-        res.status(500).json({
-          error: "An error occurred while sending the video file",
-        });
-      } else {
-        // Delete the video file after it's sent
-        fs.unlinkSync(output);
-      }
-    });
-  } catch (error) {
-    console.error("Error", error);
-    res.status(500).json({ error: "An error occurred" });
+    let page = await browser.newPage();
+    await page.goto("https://www.google.com");
+    res.send(await page.title());
+  } catch (err) {
+    console.error(err);
+    return null;
   }
 });
 

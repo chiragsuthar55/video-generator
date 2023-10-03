@@ -5,3 +5,6 @@
   from = "/*"
   to = "/dist/index.html"
   status = 200
+
+[functions]
+external_node_modules = ["@sparticuz/chromium"]
