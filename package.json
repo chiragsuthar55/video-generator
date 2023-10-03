@@ -17,6 +17,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.3",
+    "netlify": "13.1.10",
     "nodemon": "^3.0.1",
     "timecut": "^0.3.3"
   }
