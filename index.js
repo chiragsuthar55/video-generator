@@ -143,7 +143,7 @@ app.get("/video", async function (req, res) {
 
     const browser = await puppeteer.launch({
       headless: true,
-      executablePath: "./chromium",
+      executablePath: "./chromium/chrome.exe",
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     const page = await browser.newPage();
