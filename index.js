@@ -38,7 +38,7 @@ app.get("/generate-video", async function (req, res) {
   try {
     try {
       await timecut({
-        url: "https://65098c0525bea354db9fd35f--bright-lokum-ef4278.netlify.app",
+        url: "https://bright-lokum-ef4278.netlify.app/",
         viewport: {
           width: 300, // sets the viewport (window size) to 800x600
           height: 400,
@@ -78,19 +78,21 @@ app.listen(PORT, () => {
   console.log("Listening on port " + PORT);
 });
 
-// const timecut = require('timecut');
+// const timecut = require("timecut");
 // timecut({
-//   url: 'https://tungs.github.io/amuse/truchet-tiles/#autoplay=true&switchStyle=random',
+//   url: "https://tungs.github.io/amuse/truchet-tiles/#autoplay=true&switchStyle=random",
 //   viewport: {
-//     width: 800,               // sets the viewport (window size) to 800x600
-//     height: 600
+//     width: 800, // sets the viewport (window size) to 800x600
+//     height: 600,
 //   },
-//   selector: '#container',     // crops each frame to the bounding box of '#container'
-//   left: 20, top: 40,          // further crops the left by 20px, and the top by 40px
-//   right: 6, bottom: 30,       // and the right by 6px, and the bottom by 30px
-//   fps: 30,                    // saves 30 frames for each virtual second
-//   duration: 20,               // for 20 virtual seconds
-//   output: 'video.mp4'         // to video.mp4 of the current working directory
+//   selector: "#container", // crops each frame to the bounding box of '#container'
+//   left: 20,
+//   top: 40, // further crops the left by 20px, and the top by 40px
+//   right: 6,
+//   bottom: 30, // and the right by 6px, and the bottom by 30px
+//   fps: 30, // saves 30 frames for each virtual second
+//   duration: 20, // for 20 virtual seconds
+//   output: "video.mp4", // to video.mp4 of the current working directory
 // }).then(function () {
-//   console.log('Done!');
+//   console.log("Done!");
 // });
