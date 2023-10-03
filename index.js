@@ -90,9 +90,10 @@ timecut({
   top: 40, // further crops the left by 20px, and the top by 40px
   right: 6,
   bottom: 30, // and the right by 6px, and the bottom by 30px
-  fps: 30, // saves 30 frames for each virtual second
-  duration: 20, // for 20 virtual seconds
+  fps: 15, // saves 30 frames for each virtual second
+  duration: 1, // for 20 virtual seconds
   output: "video.mp4", // to video.mp4 of the current working directory
+  tempDir: "./frames",
 }).then(function () {
   console.log("Done!");
 });
