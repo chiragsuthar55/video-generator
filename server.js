@@ -98,67 +98,67 @@ app.listen(PORT, () => {
 //   console.log("Done!");
 // });
 
-const puppeteer = require("puppeteer");
-const fs = require("fs");
-const { promisify } = require("util");
-const exec = promisify(require("child_process").exec);
+// const puppeteer = require("puppeteer");
+// const fs = require("fs");
+// const { promisify } = require("util");
+// const exec = promisify(require("child_process").exec);
 
-async function captureFrames(url, selector, fps, duration, output) {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto(url);
+// async function captureFrames(url, selector, fps, duration, output) {
+//   const browser = await puppeteer.launch();
+//   const page = await browser.newPage();
+//   await page.goto(url);
 
-  const frameCount = fps * duration;
-  const frames = [];
+//   const frameCount = fps * duration;
+//   const frames = [];
 
-  for (let i = 0; i < frameCount; i++) {
-    const elementHandle = await page.$(selector);
-    const screenshot = await elementHandle.screenshot();
-    frames.push(screenshot);
-    console.log("1000 / fps", 1000 / fps);
-    console.log("fps", fps);
-    await new Promise((resolve) => setTimeout(resolve, 1000 / fps)); // Introduce delay
-  }
+//   for (let i = 0; i < frameCount; i++) {
+//     const elementHandle = await page.$(selector);
+//     const screenshot = await elementHandle.screenshot();
+//     frames.push(screenshot);
+//     console.log("1000 / fps", 1000 / fps);
+//     console.log("fps", fps);
+//     await new Promise((resolve) => setTimeout(resolve, 1000 / fps)); // Introduce delay
+//   }
 
-  await browser.close();
+//   await browser.close();
 
-  return frames;
-}
+//   return frames;
+// }
 
-async function createVideo(frames, fps, output) {
-  const frameDir = "./frames";
+// async function createVideo(frames, fps, output) {
+//   const frameDir = "./frames";
 
-  if (!fs.existsSync(frameDir)) {
-    fs.mkdirSync(frameDir);
-  }
+//   if (!fs.existsSync(frameDir)) {
+//     fs.mkdirSync(frameDir);
+//   }
 
-  frames.forEach((frame, index) => {
-    fs.writeFileSync(`${frameDir}/frame_${index}.png`, frame);
-  });
+//   frames.forEach((frame, index) => {
+//     fs.writeFileSync(`${frameDir}/frame_${index}.png`, frame);
+//   });
 
-  const { stdout, stderr } = await exec(
-    `ffmpeg -r ${fps} -i ${frameDir}/frame_%d.png -vcodec libx264 -pix_fmt yuv420p ${output}`
-  );
-  console.log("stdout", stdout);
-  console.log(stdout);
-  console.error(stderr);
+//   const { stdout, stderr } = await exec(
+//     `ffmpeg -r ${fps} -i ${frameDir}/frame_%d.png -vcodec libx264 -pix_fmt yuv420p ${output}`
+//   );
+//   console.log("stdout", stdout);
+//   console.log(stdout);
+//   console.error(stderr);
 
-  // Clean up the frames directory
-  fs.rmdirSync(frameDir, { recursive: true });
-}
+//   // Clean up the frames directory
+//   fs.rmdirSync(frameDir, { recursive: true });
+// }
 
-const url =
-  "https://tungs.github.io/amuse/truchet-tiles/#autoplay=true&switchStyle=random";
-const selector = "#container";
-const fps = 20;
-const duration = 1;
-const output = "video.mp4";
+// const url =
+//   "https://tungs.github.io/amuse/truchet-tiles/#autoplay=true&switchStyle=random";
+// const selector = "#container";
+// const fps = 20;
+// const duration = 1;
+// const output = "video.mp4";
 
-captureFrames(url, selector, fps, duration, output)
-  .then((frames) => createVideo(frames, fps, output))
-  .then(() => {
-    console.log("Done! ---------->");
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+// captureFrames(url, selector, fps, duration, output)
+//   .then((frames) => createVideo(frames, fps, output))
+//   .then(() => {
+//     console.log("Done! ---------->");
+//   })
+//   .catch((error) => {
+//     console.error(error);
+//   });
