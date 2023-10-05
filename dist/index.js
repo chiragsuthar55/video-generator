@@ -34,6 +34,8 @@ app.use(function (req, res, next) {
   next(); // Pass to next layer of middleware
 });
 
+console.log("first ---------------------------------");
+
 app.get("/generate-video", async function (req, res) {
   try {
     try {
